@@ -3,12 +3,11 @@
 
 # Data Science Principles Project: Quora Insincere questions classification
 
-
 ### Introduction
 
 This is a final project done for EE 461P: Data Science Principles at the University of Texas at Austin. This project was completed by Andy Chang, Clive Unger, Nick Edelman, Nic Key, and Avishka Suduwa Dewage.
 
-We chose to do this problem from Kaggle: 
+We chose to do this problem from Kaggle:
 [kaggle.com/c/quora-insincere-questions-classification](kaggle.com/c/quora-insincere-questions-classification)
 
 Quora.com is a platform where people can ask questions and connect with others who contribute unique insights and quality answers.
@@ -64,8 +63,13 @@ Several sets of **word embeddings** were also provided:
 ***
 
 ### Exploratory Data Analysis
-We first looked at the distribution of the target variable. The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere. 
 
+##### Imbalanced Target:
+We first looked at the distribution of the target variable. The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere.
+
+***
+
+##### Word Clouds:
 Next we looked at a word cloud of the each class to get a feel for the data. As you can see the insincere question has much more controversial words.
 
 ***
@@ -81,12 +85,34 @@ Next we looked at a word cloud of the each class to get a feel for the data. As 
 
 
 ***
-
+##### 2-gram frequency:
 It is hard to get much detail from a word cloud, so we look a the word frequencies of respective classes.
 
-Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and how they influence the target variable. The words that influence are extremely offensive. 
+| Most Insincere 2 grams | Word Count | Most Sincere 2 grams | Word Count |
+|----------------------|------------|------------------------|------------|
+| donald trump         | 1253       | best way               | 6973       |
+| white people         | 673        | year old               | 2972       |
+| black people         | 653        | will happen            | 2084       |
+| many people          | 383        | many people            | 1931       |
+| united states        | 360        | computer science       | 1870       |
+| even though          | 335        | even though            | 1859       |
+| trump supporters     | 335        | known for?             | 1822       |
+| year old             | 330        | united states          | 1797       |
+| president trump      | 328        | long take              | 1796       |
+| hillary clinton      | 305        | high school            | 1775       |
+| people think         | 297        | best ways              | 1447       |
+| chinese people       | 255        | social media           | 1435       |
+| indian muslims       | 225        | donald trump           | 1417       |
+| indian girls         | 221        | look like?             | 1327       |
+| people hate          | 217        | much time              | 1287       |
+| north indians        | 204        | much money             | 1176       |
+| people quora         | 186        | best place             | 1162       |
+| indian women         | 184        | people think           | 1143       |
+| white women          | 168        | united states?         | 1126       |
 
-
+***
+##### Logistic Regression Coefficients:
+Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and how they influence the target variable. The words that influence are extremely offensive.
 
 | Most insincere words	 |  Coefficient 	   |Most sincere words     | Coefficient |
 |------------------------|---------------------|-----------------------|---------------------|
@@ -101,8 +127,10 @@ Next we ran a basic Logistic Regression model so that we could examine the weigh
 | blacks                 | 14.226              |best                   | -6.358              |
 | women                  | 14.122              |democrats republicans  | -6.594              |
 
-
-We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as "liberals conservatives" or "black white". This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one. 
+***
+We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. 
+What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as "liberals conservatives" or "black white". 
+This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.
 
 
 ***
@@ -110,34 +138,36 @@ We also looked at the most negative weighted words, suggesting words that are mo
 ### Data Preprocessing
 We had to do a lot of data cleaning to get better performance out of the models. Our cleaning method were motivated by increasing coverage of word embeddings.
 
-With no preprocessing only 32.77% of all vocabulary in the question corpus was covered. Only 88.14% of all the text was covered by the embedding. 
+With no preprocessing only 32.77% of all vocabulary in the question corpus was covered. Only 88.14% of all the text was covered by the embedding.
 
 Our cleaning process proceeded as follows:
 1. Expand contractions out to two words
 2. Remove non-printable characters.
 3. Replace special characters with words. For example '∞': 'infinity'
-4. Replace numbers with # symbol. 
+4. Replace numbers with # symbol.
 5. Change European spellings to American and correct other common misspellings
 6. “Facebook”,  “Instagram” , etc.  convert to “Social medium”
 6. Remove stopwords and one character words.
 
-After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and 99.595% of the text.
+After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and **99.595%** of the text.
 
-Tokenization requires data cleaning
 
-Data tokenizatability increased from **22% to 97%**
 
 ***
 ***
 ### Modeling
 
 #### Model 1: Simple Recurrent Neural Network
-The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well). 
+The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well).
+
+***
 
 The entire model architecture is shown below:
 
-<img src="assets/block_diagram.png" alt="drawing" width="100%"/>
-	
+<a target="_blank" href="assets/block_diagram.png">
+	<img src="assets/block_diagram.png"  width="100%" >
+</a>
+
 ~~~~
 | Layer (type)                  | Output Shape     | Param #  |
 |-------------------------------|------------------|----------|
@@ -148,26 +178,28 @@ The entire model architecture is shown below:
 | dense_1 (Dense)               | (None, 16)       | 2064     |
 | dropout_1 (Dropout)           | (None, 16)       | 0        |
 | dense_2 (Dense)               | (None, 1)        | 17       |
+|-------------------------------|------------------|----------|
 
-Total params: 15,142,625 
+Total params: 15,142,625
 
-Trainable params: 15,142,625 
+Trainable params: 15,142,625
 
-Non-trainable params: 0 
+Non-trainable params: 0
 ~~~~
 
+***
 
-For both inference and training, each input question/sentence is first cleaned, tokenized, and padded into a sequence of length 100. This is fed into the model’s first layer, the embedding layer. As previously stated, we experimented with different pre-trained embeddings (such as word2vec, GloVe etc.) and learned embeddings (from provided training data) for this layer. This RNN implementation was used for further experimentation with different embedding options. 
+For both inference and training, each input question/sentence is first cleaned, tokenized, and padded into a sequence of length 100. This is fed into the model’s first layer, the embedding layer. As previously stated, we experimented with different pre-trained embeddings (such as word2vec, GloVe etc.) and learned embeddings (from provided training data) for this layer. This RNN implementation was used for further experimentation with different embedding options.
 
 ***
 ***
 
-Next, a simple bidirectional GRU layer is used for temporal reasoning (a more detailed diagram of a GRU is shown below). The rest of the network is filled out with the usual suspects: fully connected, max pooling, and dropout layers. 
+Next, a simple bidirectional GRU layer is used for temporal reasoning (a more detailed diagram of a GRU is shown below). The rest of the network is filled out with the usual suspects: fully connected, max pooling, and dropout layers.
 
 <img src="assets/GRU.png" alt="drawing" width="100%"/>
 
 
-This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score. 
+This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score.
 
 
 
