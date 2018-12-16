@@ -40,24 +40,18 @@
       <section id="main_content" class="inner">
         <h1 id="data-science-principles-project-quora-insincere-questions-classification">Data Science Principles Project: Quora Insincere questions classification</h1>
 
-<h3 id="introduction">Introduction</h3>
-
 <p>This is a final project done for EE 461P: Data Science Principles at the University of Texas at Austin. This project was completed by Andy Chang, Clive Unger, Nick Edelman, Nic Key, and Avishka Suduwa Dewage.</p>
 
-<p>We chose to do this problem from Kaggle:
-<a href="kaggle.com/c/quora-insincere-questions-classification">kaggle.com/c/quora-insincere-questions-classification</a></p>
-
+<h3 id="introduction">Introduction</h3>
 <p>Quora.com is a platform where people can ask questions and connect with others who contribute unique insights and quality answers.</p>
 
 <p>A key challenge is to weed out insincere questions, founded upon false premises, or intending to make a statement rather than look for helpful answers.</p>
 
-<p>In this competition, Kagglers will develop models that identify and flag insincere questions.</p>
+<p>Quora has released a Kaggle competition to develop models that identify and flag insincere questions. <a href="kaggle.com/c/quora-insincere-questions-classification">kaggle.com/c/quora-insincere-questions-classification</a></p>
 
 <p>While we are not veteran Kaggler’s our motivation with this competition was to learn interesting machine learning techniques used for text based data.</p>
 
-<p>Our original project proposal was based on the Kaggle competition “Classifying Toxic Comments”.</p>
-
-<p>However, since Quora recently released this new competition which has a similar premise we decided it would be interesting to work on a newer problem.</p>
+<p>Our original project proposal was based on the Kaggle competition “Classifying Toxic Comments”. [link toxic] However, since Quora recently released this new competition which has a similar premise we decided it would be interesting to work on a newer problem.</p>
 
 <hr />
 <hr />
@@ -148,13 +142,16 @@
 
 <h3 id="exploratory-data-analysis">Exploratory Data Analysis</h3>
 
+<p>Every good data scientist will understand that the first step in tackling a problem is to look at the data, so that is what we did.</p>
+
 <h5 id="imbalanced-target">Imbalanced Target:</h5>
-<p>We first looked at the distribution of the target variable. The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere.</p>
+<p>We first looked at the distribution of the target variable. 
+The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere. That means we are working with a highly imbalanced data set, which must be considered when modeling.</p>
 
 <hr />
 
 <h5 id="word-clouds">Word Clouds:</h5>
-<p>Next we looked at a word cloud of the each class to get a feel for the data. As you can see the insincere question has much more controversial words.</p>
+<p>Next we looked at a word cloud of the insincere and sincere questions to get a feel for the data. As you can see the insincere question has much more controversial words.</p>
 
 <hr />
 
@@ -168,7 +165,8 @@
 
 <hr />
 <h5 id="2-gram-frequency">2-gram frequency:</h5>
-<p>It is hard to get much detail from a word cloud, so we look a the word frequencies of respective classes.</p>
+
+<p>It is hard to get much detail from a word cloud, so we look a the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for “best ways” or “pro cons” while insincere questions will ask about a specific group or include phrases such as “stupid question”.</p>
 
 <table>
   <thead>
@@ -299,7 +297,7 @@
 
 <hr />
 <h5 id="logistic-regression-coefficients">Logistic Regression Coefficients:</h5>
-<p>Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and how they influence the target variable. The words that influence are extremely offensive.</p>
+<p>Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and see how they influence the target variable. The highest weighted words are extremely offensive such as “castrate”.</p>
 
 <table>
   <thead>
@@ -375,18 +373,16 @@
 </table>
 
 <hr />
-<p>We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. 
-What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as “liberals conservatives” or “black white”. 
-This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.</p>
+<p>We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. The data makes sense as the most negative words are “best” or “tips”. What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as “liberals conservatives” or “black white”.  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.</p>
 
 <hr />
 <hr />
 <h3 id="data-preprocessing">Data Preprocessing</h3>
-<p>We had to do a lot of data cleaning to get better performance out of the models. Our cleaning method were motivated by increasing coverage of word embeddings.</p>
+<p>This Kaggle competition is kernel only, so we can only use the provided data, therefore we planned on utilizing the word embeddings provided. Word embedding is a natural language processing technique where words or phrases from the vocabulary are mapped to vectors of real numbers. However, to get the most of word embeddings the vocabulary of the training set must be in the embeddings, for example if the word “cat” is in the training set, there must also be an entry for it in the embedding.</p>
 
-<p>With no preprocessing only 32.77% of all vocabulary in the question corpus was covered. Only 88.14% of all the text was covered by the embedding.</p>
+<p>After exploring the data, we realized the data was quite messy and could be cleaned up. Cleaning the data was crucial to get better performance coverage of the word embeddings. With no preprocessing only 32.77% of all vocabulary in the question corpus was covered by the embedding and only 88.14% of all the text was covered.</p>
 
-<p>Our cleaning process proceeded as follows:</p>
+<p>Our cleaning process:</p>
 <ol>
   <li>Expand contractions out to two words</li>
   <li>Remove non-printable characters.</li>
@@ -397,7 +393,7 @@ This possibly suggests that more sincere questions consider both sides of argume
   <li>Remove stopwords and one character words.</li>
 </ol>
 
-<p>After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and <strong>99.595%</strong> of the text.</p>
+<p>After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and 99.595% of the text.</p>
 
 <hr />
 
@@ -408,9 +404,8 @@ This possibly suggests that more sincere questions consider both sides of argume
 <h3 id="modeling">Modeling</h3>
 
 <h4 id="model-1-simple-recurrent-neural-network">Model 1: Simple Recurrent Neural Network</h4>
-<p>The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well).</p>
-
-<hr />
+<p>The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well). The entire model architecture is shown below:
+***</p>
 
 <p>The entire model architecture is shown below:</p>
 
