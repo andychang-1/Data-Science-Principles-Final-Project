@@ -186,6 +186,15 @@ Next, a simple bidirectional GRU layer is used for temporal reasoning (a more de
 
 This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score.
 
+### Model 2: GRU RNN w/ Capsule Layer and Preprocessing
+This model is derived from the model described above; however, it differs in two ways. First, the text is cleaned by the removal of punctuation, non-printable characters and contractions. Secondly, a few layers, including a ‘capsule’ layer taken from another kernel, are inserted into the RNN model. The block diagram for this model is shown below.
+
+Capsule networks (CapsNets) were originally theorized and designed for vision tasks, as an alternative to CNNs. However, the capsule layer (the main unit of the CapsNet) has since been introduced in networks for NLP problems, and was very successful in the Wikipedia Toxic Comment Classification Kaggle Competition. Since this competition is so similar in nature to the Wikipedia Competition, capsule-equipped GRU-based RNNs have shown some of the best performance in the kernels and leaderboard.
+
+This model performs much better than the first, achieving a public score of 0.689. However, many people participating in the competition have highlighted the fact that this Keras CuDNN-based implementation of GRU is optimized for speed, but may have varying outputs for the same data (or kernel). Thus, this score may fluctuate up or down across submissions.
+
+
+
 ## Ethics
 This project raises important ethical questions.
 
