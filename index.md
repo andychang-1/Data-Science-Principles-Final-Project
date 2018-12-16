@@ -16,6 +16,15 @@ A key challenge is to weed out insincere questions, founded upon false premises,
 
 In this competition, Kagglers will develop models that identify and flag insincere questions.
 
+While we are not veteran Kaggler's our motivation with this competition was to learn interesting machine learning techniques used for text based data.
+
+Our original project proposal was based on the Kaggle competition "Classifying Toxic Comments".
+
+However, since Quora recently released this new competition which has a similar premise we decided it would be interesting to work on a newer problem. 
+
+
+
+
 ***
 ***
 
@@ -150,6 +159,10 @@ Our cleaning process proceeded as follows:
 6. Remove stopwords and one character words.
 
 After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and **99.595%** of the text.
+
+***
+
+#### Word Embeddings:
 
 
 
