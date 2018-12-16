@@ -5,7 +5,7 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=15c2c926e5f9fea0e9fe84f3924d11f60b132b89">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=4043e3209d4f2151b337491b0fd635412e22fa8a">
 
 <!-- Begin Jekyll SEO tag v2.5.0 -->
 <title>Introduction | Quora Insincere Question Classification</title>
@@ -44,7 +44,7 @@
 <h3 id="introduction">Introduction</h3>
 <p>Quora.com is a platform where people can ask questions and connect with others who contribute unique insights and quality answers. A key challenge is to weed out insincere questions, founded upon false premises, or intending to make a statement rather than look for helpful answers. Quora has released a Kaggle competition to develop models that identify and flag insincere questions.</p>
 
-<p><a href="kaggle.com/c/quora-insincere-questions-classification">Quora Insincere Questions Classification</a></p>
+<p><a href="https://www.kaggle.com/c/quora-insincere-questions-classification">Quora Insincere Questions Classification</a></p>
 
 <p>While we are not veteran Kaggler’s our motivation with this competition was to learn interesting machine learning techniques used for text based data.</p>
 
@@ -152,18 +152,20 @@ The number of insincere questions is much less than the sincere, with only 6% of
 
 <hr />
 
-<p><a target="_blank" href="assets/wordcloud_good.png">
+<p><a target="_blank_" href="assets/wordcloud_good.png">
 	<img src="assets/wordcloud_good.png" width="100%" />
 </a></p>
 
-<p><a target="_blank" href="assets/wordcloud_bad.png">
+<p><a target="_blank_" href="assets/wordcloud_bad.png">
 	<img src="assets/wordcloud_bad.png" width="100%" />
 </a></p>
 
 <hr />
-<h5 id="2-gram-frequency">2-gram frequency:</h5>
+<h5 id="word-frequency">Word frequency:</h5>
 
 <p>It is hard to get much detail from a word cloud, so we look a the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for “best ways” or “pro cons” while insincere questions will ask about a specific group or include phrases such as “stupid question”.</p>
+
+<p>Bi-Gram Frequency Chart:</p>
 
 <table>
   <thead>
@@ -387,7 +389,7 @@ The number of insincere questions is much less than the sincere, with only 6% of
   <li>Replace numbers with # symbol.</li>
   <li>Change European spellings to American and correct other common misspellings</li>
   <li>“Facebook”,  “Instagram” , etc.  convert to “Social medium”</li>
-  <li>Remove stopwords and one character words.</li>
+  <li>Remove stop words and one character words.</li>
 </ol>
 
 <p>After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and 99.595% of the text.</p>
@@ -442,6 +444,26 @@ Non-trainable params: 0
 <p>This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score.</p>
 
 <iframe width="100%" height="300" src="//jsfiddle.net/avishkas/f3wmypv9/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+
+<h3 id="ethics">Ethics</h3>
+
+<hr />
+
+<p>This project raises important ethical questions.</p>
+
+<p>The standard for “sincere” and “insincere” was given in the training data. Based on what training data is fed into the model, this model can discriminate between any arbitrary types of questions/statements.</p>
+
+<p>The competition states that these models will be used to filter “Insincere” questions, but theres nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.</p>
+
+<hr />
+
+<p>Additionally, we asked ourselves: “Why are comments on these questions not given to the model?”</p>
+
+<p>We realized that the model would be intended to censor questions before other users were allowed to see them.</p>
+
+<p>Is it right to have the ability to silence a minority of people for having different opinions?</p>
+
+<p>Will driving controversial opinions off of the mainstream web increase or decrease social divisidedness?</p>
 
       </section>
     </div>

@@ -2,7 +2,7 @@
 ### Introduction
 Quora.com is a platform where people can ask questions and connect with others who contribute unique insights and quality answers. A key challenge is to weed out insincere questions, founded upon false premises, or intending to make a statement rather than look for helpful answers. Quora has released a Kaggle competition to develop models that identify and flag insincere questions.
 
-[Quora Insincere Questions Classification](kaggle.com/c/quora-insincere-questions-classification)
+[Quora Insincere Questions Classification](https://www.kaggle.com/c/quora-insincere-questions-classification)
 
  While we are not veteran Kaggler's our motivation with this competition was to learn interesting machine learning techniques used for text based data.
 
@@ -69,21 +69,22 @@ Next we looked at a word cloud of the insincere and sincere questions to get a f
 
 ***
 
-<a target="_blank" href="assets/wordcloud_good.png">
+<a target="_blank_" href="assets/wordcloud_good.png">
 	<img src="assets/wordcloud_good.png"  width="100%" >
 </a>
 
-<a target="_blank" href="assets/wordcloud_bad.png">
+<a target="_blank_" href="assets/wordcloud_bad.png">
 	<img src="assets/wordcloud_bad.png"  width="100%" >
 </a>
 
 
 
 ***
-##### 2-gram frequency:
+##### Word frequency:
 
 It is hard to get much detail from a word cloud, so we look a the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for "best ways" or "pro cons" while insincere questions will ask about a specific group or include phrases such as "stupid question".
 
+Bi-Gram Frequency Chart:
 
 | Most Insincere 2 grams | Word Count | Most Sincere 2 grams | Word Count |
 |----------------------|------------|------------------------|------------|
@@ -143,7 +144,7 @@ Our cleaning process:
 4. Replace numbers with # symbol.
 5. Change European spellings to American and correct other common misspellings
 6. “Facebook”,  “Instagram” , etc.  convert to “Social medium”
-6. Remove stopwords and one character words.
+6. Remove stop words and one character words.
 
 After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and 99.595% of the text.
 
@@ -203,3 +204,25 @@ This model performs reasonably well considering its simplicity. The top score ac
 
 
 <iframe width="100%" height="300" src="//jsfiddle.net/avishkas/f3wmypv9/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+
+
+
+### Ethics
+
+***
+
+This project raises important ethical questions.
+
+The standard for "sincere" and "insincere" was given in the training data. Based on what training data is fed into the model, this model can discriminate between any arbitrary types of questions/statements.
+
+The competition states that these models will be used to filter "Insincere" questions, but theres nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.
+
+***
+
+Additionally, we asked ourselves: "Why are comments on these questions not given to the model?"
+
+We realized that the model would be intended to censor questions before other users were allowed to see them.
+
+Is it right to have the ability to silence a minority of people for having different opinions?
+
+Will driving controversial opinions off of the mainstream web increase or decrease social divisidedness?
