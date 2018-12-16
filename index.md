@@ -119,6 +119,8 @@ We also looked at the most negative weighted words, suggesting words that are mo
 
 
 ### Word Embeddings:
+ A word embedding is a natural language processing technique where words or phrases from the vocabulary are mapped to vectors of real numbers.
+
 To visualize the overlapping of insincere and sincere words, we took the 250 most frequent words of both categories, took their respective vectors from a pre-trained glove-embedding, and mapped them to 3D space using PCA. Below you can see the 3D-visualization of the words. The <span style="color:blue">blue</span> dots are words belonging to the sincere category, <span style="color:red">red</span> dots are words belonging to the insincere category, and <span style="color:green">green</span> dots belong to both. The glove embedding uses vectors of dimension 300 and only 15.86% of the variance is explained when mapping down to 3 dimensions, so this visualization is by no means a perfect representation of spread. However, we noticed that insincere words tend to be more spread out compared to sincere word and that there is a significant amount of overlapping, making this a more difficult problem. We noticed that words which are insincere tend to refer to a group of people and words which are sincere or both tend to have more neutral connotations.
 
 
@@ -129,7 +131,7 @@ To visualize the overlapping of insincere and sincere words, we took the 250 mos
 ***
 ***
 ## Data Preprocessing
-This Kaggle competition is kernel only, so we can only use the provided data, therefore we planned on utilizing the word embeddings provided. Word embedding is a natural language processing technique where words or phrases from the vocabulary are mapped to vectors of real numbers. However, to get the most of word embeddings the vocabulary of the training set must be in the embeddings, for example if the word "cat" is in the training set, there must also be an entry for it in the embedding.
+This Kaggle competition is kernel only, so we can only use the provided data, therefore we planned on utilizing the word embeddings provided. However, to get the most of word embeddings the vocabulary of the training set must be in the embeddings, for example if the word "cat" is in the training set, there must also be an entry for it in the embedding.
 
 After exploring the data, we realized the data was quite messy and could be cleaned up. Cleaning the data was crucial to get better performance coverage of the word embeddings. With no preprocessing only 32.77% of all vocabulary in the question corpus was covered by the embedding and only 88.14% of all the text was covered.
 
@@ -187,7 +189,7 @@ Next, a simple bidirectional GRU layer is used for temporal reasoning (a more de
 This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score.
 
 ### Model 2: GRU RNN w/ Capsule Layer and Preprocessing
-This model is derived from the model described above; however, it differs in two ways. First, the text is cleaned by the removal of punctuation, non-printable characters and contractions. Secondly, a few layers, including a ‘capsule’ layer taken from another kernel, are inserted into the RNN model. The block diagram for this model is shown below.
+This model is derived from the model described above; however, it differs in three ways. First, the text is cleaned by the removal of punctuation, non-printable characters and contractions. Secondly, a few layers, including a ‘capsule’ layer taken from another kernel, are inserted into the RNN model. Thirdly, instead of ensembling multiple RNN models each with a different pre-trained embedding, this model simply averages the different embedding matrices and trains a single model. The block diagram for this model is shown below.
 
 Capsule networks (CapsNets) were originally theorized and designed for vision tasks, as an alternative to CNNs. However, the capsule layer (the main unit of the CapsNet) has since been introduced in networks for NLP problems, and was very successful in the Wikipedia Toxic Comment Classification Kaggle Competition. Since this competition is so similar in nature to the Wikipedia Competition, capsule-equipped GRU-based RNNs have shown some of the best performance in the kernels and leaderboard.
 
@@ -195,20 +197,11 @@ This model performs much better than the first, achieving a public score of 0.68
 
 
 
+
 ## Ethics
-This project raises important ethical questions.
+This project raises important ethical questions. The standard for "sincere" and "insincere" was given in the training data. Based on what training data is fed into the model, this model can discriminate between any arbitrary types of questions/statements. The competition states that these models will be used to filter "Insincere" questions, but there is nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.
 
-The standard for "sincere" and "insincere" was given in the training data. Based on what training data is fed into the model, this model can discriminate between any arbitrary types of questions/statements.
-
-The competition states that these models will be used to filter "Insincere" questions, but there is nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.
-
-Additionally, we asked ourselves: "Why are comments on these questions not given to the model?"
-
-We realized that the model would be intended to censor questions before other users were allowed to see them.
-
-Is it right to have the ability to silence a minority of people for having different opinions?
-
-Will driving controversial opinions off of the mainstream web increase or decrease social dividedness?
+Additionally, we asked ourselves: "Why are comments on these questions not given to the model?" We realized that the model would be intended to censor questions before other users were allowed to see them. Is it right to have the ability to silence a minority of people for having different opinions? Will driving controversial opinions off of the mainstream web increase or decrease social dividedness?
 
 ## What We Learned
 Overall this project required a large amount of learning. The competition was inherently a NLP focused project, which no one on the team had much experience with.
