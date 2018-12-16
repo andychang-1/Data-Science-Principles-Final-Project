@@ -128,6 +128,12 @@ Next we ran a basic Logistic Regression model so that we could examine the weigh
 ***
 We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. The data makes sense as the most negative words are "best" or "tips". What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as "liberals conservatives" or "black white".  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.
 
+***
+
+#### Word Embeddings:
+To visualize the overlapping of insincere and sincere words, we took the 250 most frequent words of both categories, took their respective vectors from a pre-trained glove-embedding, and mapped them to 3D space using PCA. Below you can see the 3D-visualization of the words. The <span style="color:blue">blue</span> dots are words belonging to the sincere category, <span style="color:red">red</span> dots are words belonging to the insincere category, and <span style="color:green">green</span> dots belong to both. The glove embedding uses vectors of dimension 300 and only 15.86% of the variance is explained when mapping down to 3 dimensions, so this visualization is by no means a perfect representation of spread. However, we noticed that insincere words tend to be more spread out compared to sincere word and that there is a significant amount of overlapping, making this a more difficult problem.
+
+<iframe width="100%" height="700" src="//jsfiddle.net/avishkas/f3wmypv9/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
 
 
 ***
@@ -148,11 +154,6 @@ Our cleaning process:
 
 After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and 99.595% of the text.
 
-***
-
-#### Word Embeddings:
-
-
 
 ***
 ***
@@ -164,7 +165,7 @@ The first model we experimented with is a simple RNN implementation in Keras. Th
 
 The entire model architecture is shown below:
 
-<a target="_blank" href="assets/block_diagram.png">
+<a target="_blank_" href="assets/block_diagram.png">
 	<img src="assets/block_diagram.png"  width="100%" >
 </a>
 
@@ -203,7 +204,7 @@ This model performs reasonably well considering its simplicity. The top score ac
 
 
 
-<iframe width="100%" height="300" src="//jsfiddle.net/avishkas/f3wmypv9/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+
 
 
 
