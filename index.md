@@ -28,8 +28,6 @@ The **test data** is 56.4k rows of data, it obviously does not have the target l
 | … | … |
 | fffed08be2626f74b139 | Why do all the stupid people I know tend to be left-wing?|
 
-***
-
 The rules by which the training data was scored is as follows:
 * Has a non-neutral tone
 * Is disparaging or inflammatory
@@ -62,12 +60,8 @@ Every good data scientist will understand that the first step in tackling a prob
 We first looked at the distribution of the target variable.
 The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere. That means we are working with a highly imbalanced data set, which must be considered when modeling.
 
-***
-
 ##### Word Clouds:
 Next we looked at a word cloud of the insincere and sincere questions to get a feel for the data. As you can see the insincere question has much more controversial words.
-
-***
 
 <a target="_blank_" href="assets/wordcloud_good.png">
 	<img src="assets/wordcloud_good.png"  width="100%" >
@@ -77,12 +71,9 @@ Next we looked at a word cloud of the insincere and sincere questions to get a f
 	<img src="assets/wordcloud_bad.png"  width="100%" >
 </a>
 
-
-
-***
 ##### Word frequency:
 
-It is hard to get much detail from a word cloud, so we look a the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for "best ways" or "pro cons" while insincere questions will ask about a specific group or include phrases such as "stupid question".
+It is hard to get much detail from a word cloud, so we looked at the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for "best ways" or "pro cons" while insincere questions will ask about a specific group or include phrases such as "stupid question".
 
 Bi-Gram Frequency Chart:
 
@@ -108,7 +99,6 @@ Bi-Gram Frequency Chart:
 | indian women         | 184        | people think           | 1143       |
 | white women          | 168        | united states?         | 1126       |
 
-***
 ##### Logistic Regression Coefficients:
 Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and see how they influence the target variable. The highest weighted words are extremely offensive such as "castrate".
 
@@ -125,10 +115,8 @@ Next we ran a basic Logistic Regression model so that we could examine the weigh
 | blacks                 | 14.226              |best                   | -6.358              |
 | women                  | 14.122              |democrats republicans  | -6.594              |
 
-***
 We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. The data makes sense as the most negative words are "best" or "tips". What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as "liberals conservatives" or "black white".  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.
 
-***
 
 #### Word Embeddings:
 To visualize the overlapping of insincere and sincere words, we took the 250 most frequent words of both categories, took their respective vectors from a pre-trained glove-embedding, and mapped them to 3D space using PCA. Below you can see the 3D-visualization of the words. The <span style="color:blue">blue</span> dots are words belonging to the sincere category, <span style="color:red">red</span> dots are words belonging to the insincere category, and <span style="color:green">green</span> dots belong to both. The glove embedding uses vectors of dimension 300 and only 15.86% of the variance is explained when mapping down to 3 dimensions, so this visualization is by no means a perfect representation of spread. However, we noticed that insincere words tend to be more spread out compared to sincere word and that there is a significant amount of overlapping, making this a more difficult problem.
@@ -161,7 +149,6 @@ After all of this cleaning we improved the word embedding coverage to cover 75% 
 
 #### Model 1: Simple Recurrent Neural Network
 The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well). The entire model architecture is shown below:
-***
 
 The entire model architecture is shown below:
 
@@ -188,12 +175,7 @@ Trainable params: 15,142,625
 Non-trainable params: 0
 ~~~~
 
-***
-
 For both inference and training, each input question/sentence is first cleaned, tokenized, and padded into a sequence of length 100. This is fed into the model’s first layer, the embedding layer. As previously stated, we experimented with different pre-trained embeddings (such as word2vec, GloVe etc.) and learned embeddings (from provided training data) for this layer. This RNN implementation was used for further experimentation with different embedding options.
-
-***
-***
 
 Next, a simple bidirectional GRU layer is used for temporal reasoning (a more detailed diagram of a GRU is shown below). The rest of the network is filled out with the usual suspects: fully connected, max pooling, and dropout layers.
 
@@ -202,23 +184,13 @@ Next, a simple bidirectional GRU layer is used for temporal reasoning (a more de
 
 This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score.
 
-
-
-
-
-
-
 ### Ethics
-
-***
 
 This project raises important ethical questions.
 
 The standard for "sincere" and "insincere" was given in the training data. Based on what training data is fed into the model, this model can discriminate between any arbitrary types of questions/statements.
 
 The competition states that these models will be used to filter "Insincere" questions, but theres nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.
-
-***
 
 Additionally, we asked ourselves: "Why are comments on these questions not given to the model?"
 

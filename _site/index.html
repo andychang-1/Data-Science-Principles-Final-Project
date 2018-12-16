@@ -5,7 +5,7 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=4043e3209d4f2151b337491b0fd635412e22fa8a">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=3a5833d8a647ab2e1610aaa4a0f288aa184cfa1c">
 
 <!-- Begin Jekyll SEO tag v2.5.0 -->
 <title>Introduction | Quora Insincere Question Classification</title>
@@ -18,7 +18,7 @@
 <meta property="og:url" content="http://localhost:4000/" />
 <meta property="og:site_name" content="Quora Insincere Question Classification" />
 <script type="application/ld+json">
-{"@type":"WebSite","url":"http://localhost:4000/","name":"Quora Insincere Question Classification","headline":"Introduction","description":"A project for EE 461P Data Science Principles at the University of Texas at Austin by Andy Chang, Clive Unger, Nick Edelman, Nic Key, and Avishka Suduwa Dewage.","@context":"http://schema.org"}</script>
+{"@type":"WebSite","url":"http://localhost:4000/","headline":"Introduction","name":"Quora Insincere Question Classification","description":"A project for EE 461P Data Science Principles at the University of Texas at Austin by Andy Chang, Clive Unger, Nick Edelman, Nic Key, and Avishka Suduwa Dewage.","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
   </head>
@@ -108,8 +108,6 @@
   </tbody>
 </table>
 
-<hr />
-
 <p>The rules by which the training data was scored is as follows:</p>
 <ul>
   <li>Has a non-neutral tone</li>
@@ -145,12 +143,8 @@
 <p>We first looked at the distribution of the target variable.
 The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere. That means we are working with a highly imbalanced data set, which must be considered when modeling.</p>
 
-<hr />
-
 <h5 id="word-clouds">Word Clouds:</h5>
 <p>Next we looked at a word cloud of the insincere and sincere questions to get a feel for the data. As you can see the insincere question has much more controversial words.</p>
-
-<hr />
 
 <p><a target="_blank_" href="assets/wordcloud_good.png">
 	<img src="assets/wordcloud_good.png" width="100%" />
@@ -160,10 +154,9 @@ The number of insincere questions is much less than the sincere, with only 6% of
 	<img src="assets/wordcloud_bad.png" width="100%" />
 </a></p>
 
-<hr />
 <h5 id="word-frequency">Word frequency:</h5>
 
-<p>It is hard to get much detail from a word cloud, so we look a the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for “best ways” or “pro cons” while insincere questions will ask about a specific group or include phrases such as “stupid question”.</p>
+<p>It is hard to get much detail from a word cloud, so we looked at the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for “best ways” or “pro cons” while insincere questions will ask about a specific group or include phrases such as “stupid question”.</p>
 
 <p>Bi-Gram Frequency Chart:</p>
 
@@ -294,7 +287,6 @@ The number of insincere questions is much less than the sincere, with only 6% of
   </tbody>
 </table>
 
-<hr />
 <h5 id="logistic-regression-coefficients">Logistic Regression Coefficients:</h5>
 <p>Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and see how they influence the target variable. The highest weighted words are extremely offensive such as “castrate”.</p>
 
@@ -371,10 +363,7 @@ The number of insincere questions is much less than the sincere, with only 6% of
   </tbody>
 </table>
 
-<hr />
 <p>We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. The data makes sense as the most negative words are “best” or “tips”. What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as “liberals conservatives” or “black white”.  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.</p>
-
-<hr />
 
 <h4 id="word-embeddings">Word Embeddings:</h4>
 <p>To visualize the overlapping of insincere and sincere words, we took the 250 most frequent words of both categories, took their respective vectors from a pre-trained glove-embedding, and mapped them to 3D space using PCA. Below you can see the 3D-visualization of the words. The <span style="color:blue">blue</span> dots are words belonging to the sincere category, <span style="color:red">red</span> dots are words belonging to the insincere category, and <span style="color:green">green</span> dots belong to both. The glove embedding uses vectors of dimension 300 and only 15.86% of the variance is explained when mapping down to 3 dimensions, so this visualization is by no means a perfect representation of spread. However, we noticed that insincere words tend to be more spread out compared to sincere word and that there is a significant amount of overlapping, making this a more difficult problem.</p>
@@ -406,8 +395,7 @@ The number of insincere questions is much less than the sincere, with only 6% of
 <h3 id="modeling">Modeling</h3>
 
 <h4 id="model-1-simple-recurrent-neural-network">Model 1: Simple Recurrent Neural Network</h4>
-<p>The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well). The entire model architecture is shown below:
-***</p>
+<p>The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well). The entire model architecture is shown below:</p>
 
 <p>The entire model architecture is shown below:</p>
 
@@ -433,12 +421,7 @@ Trainable params: 15,142,625
 Non-trainable params: 0
 </code></pre></div></div>
 
-<hr />
-
 <p>For both inference and training, each input question/sentence is first cleaned, tokenized, and padded into a sequence of length 100. This is fed into the model’s first layer, the embedding layer. As previously stated, we experimented with different pre-trained embeddings (such as word2vec, GloVe etc.) and learned embeddings (from provided training data) for this layer. This RNN implementation was used for further experimentation with different embedding options.</p>
-
-<hr />
-<hr />
 
 <p>Next, a simple bidirectional GRU layer is used for temporal reasoning (a more detailed diagram of a GRU is shown below). The rest of the network is filled out with the usual suspects: fully connected, max pooling, and dropout layers.</p>
 
@@ -448,15 +431,11 @@ Non-trainable params: 0
 
 <h3 id="ethics">Ethics</h3>
 
-<hr />
-
 <p>This project raises important ethical questions.</p>
 
 <p>The standard for “sincere” and “insincere” was given in the training data. Based on what training data is fed into the model, this model can discriminate between any arbitrary types of questions/statements.</p>
 
 <p>The competition states that these models will be used to filter “Insincere” questions, but theres nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.</p>
-
-<hr />
 
 <p>Additionally, we asked ourselves: “Why are comments on these questions not given to the model?”</p>
 
