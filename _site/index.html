@@ -19,7 +19,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#157878">
-    <link rel="stylesheet" href="/assets/css/style.css?v=504f2f826225192c286f57cb0192b91ca640bad6">
+    <link rel="stylesheet" href="/assets/css/style.css?v=7fd54c63c29af2a8026e4f4c7206750d0e9c416c">
   </head>
   <body>
     <section class="page-header">
@@ -38,7 +38,7 @@
 
 <p><a href="https://www.kaggle.com/c/quora-insincere-questions-classification">Quora Insincere Questions Classification</a></p>
 
-<p>While we are not veteran Kaggler’s our motivation with this competition was to learn interesting machine learning techniques used for text based data.</p>
+<p>While we are not veteran Kaggler’s our motivation for this competition was to learn interesting machine learning techniques used for text based data.</p>
 
 <p>Our original project proposal was based on the Kaggle competition <a href="https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge">“Toxic Comment Classification Challenge”</a>. However, since Quora recently released this new competition which has a similar premise we decided it would be interesting to work on a newer problem.</p>
 
@@ -138,17 +138,19 @@ The number of insincere questions is much less than the sincere, with only 6% of
 <h3 id="word-clouds">Word Clouds:</h3>
 <p>Next we looked at a word cloud of the insincere and sincere questions to get a feel for the data. As you can see the insincere question has much more controversial words.</p>
 
+<h4 id="word-cloud-of-sincere-words">Word Cloud of Sincere Words</h4>
 <p><a target="_blank_" href="assets/wordcloud_good.png">
 	<img src="assets/wordcloud_good.png" width="100%" />
 </a></p>
 
+<h4 id="word-cloud-of-insincere-words">Word Cloud of Insincere Words</h4>
 <p><a target="_blank_" href="assets/wordcloud_bad.png">
 	<img src="assets/wordcloud_bad.png" width="100%" />
 </a></p>
 
 <h3 id="word-frequency">Word frequency:</h3>
 
-<p>It is hard to get much detail from a word cloud, so we looked at the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for “best ways” or “pro cons” while insincere questions will ask about a specific group or include phrases such as “stupid question”.</p>
+<p>It is hard to get much detail from a word cloud, so we looked at the word frequencies of respective classes. In addition to single word frequencies, we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions ask for “best ways” or “pro cons” while insincere questions ask about a specific group or include phrases such as “stupid question”.</p>
 
 <p>Bi-Gram Frequency Chart:</p>
 
@@ -282,6 +284,8 @@ The number of insincere questions is much less than the sincere, with only 6% of
 <h3 id="logistic-regression-coefficients">Logistic Regression Coefficients:</h3>
 <p>Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and see how they influence the target variable. The highest weighted words are extremely offensive such as “castrate”.</p>
 
+<p>We also looked at the most negative weighted words, which are potentially influence sincere questions. The most negative words are “best” or “tips”, which makes sense. Another interesting observations is that with sincere questions there is mentions of both sides of opposing ideas, such as “liberals conservatives” or “black white”. This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.</p>
+
 <table>
   <thead>
     <tr>
@@ -355,8 +359,6 @@ The number of insincere questions is much less than the sincere, with only 6% of
   </tbody>
 </table>
 
-<p>We also looked at the most negative weighted words, suggesting words that are most found with sincere questions. The data makes sense as the most negative words are “best” or “tips”. What is interesting here is that with sincere questions there is mentions of both sides of opposing ideas, such as “liberals conservatives” or “black white”.  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.</p>
-
 <h3 id="word-embeddings">Word Embeddings:</h3>
 <p>A word embedding is a natural language processing technique where words or phrases from the vocabulary are mapped to vectors of real numbers.</p>
 
@@ -368,7 +370,7 @@ The number of insincere questions is much less than the sincere, with only 6% of
 <hr />
 <hr />
 <h2 id="data-preprocessing">Data Preprocessing</h2>
-<p>This Kaggle competition is kernel only, so we can only use the provided data, therefore we planned on utilizing the word embeddings provided. However, to get the most of word embeddings the vocabulary of the training set must be in the embeddings, for example if the word “cat” is in the training set, there must also be an entry for it in the embedding.</p>
+<p>This Kaggle competition is kernel only, so we can only use the provided data, therefore we utilize the word embeddings provided. However, to get the most out of word embeddings the vocabulary of the training set must overlap with the embeddings. For example if the word “cat” is in the training set, there must also be an entry for it in the embedding.</p>
 
 <p>After exploring the data, we realized the data was quite messy and could be cleaned up. Cleaning the data was crucial to get better performance coverage of the word embeddings. With no preprocessing only 32.77% of all vocabulary in the question corpus was covered by the embedding and only 88.14% of all the text was covered.</p>
 
