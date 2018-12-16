@@ -1,5 +1,5 @@
 
-### Introduction
+## Introduction
 Quora.com is a platform where people can ask questions and connect with others who contribute unique insights and quality answers. A key challenge is to weed out insincere questions, founded upon false premises, or intending to make a statement rather than look for helpful answers. Quora has released a Kaggle competition to develop models that identify and flag insincere questions.
 
 [Quora Insincere Questions Classification](https://www.kaggle.com/c/quora-insincere-questions-classification)
@@ -11,7 +11,7 @@ Our original project proposal was based on the Kaggle competition ["Toxic Commen
 ***
 ***
 
-### The Data
+## The Data
 The **training data** is 1.31m rows of data, it looks like this.
 
 | qid | question_text | target |
@@ -42,9 +42,9 @@ Several sets of **word embeddings** were also provided:
 
 ***
 ***
-### Evaluation
+## Evaluation
 
-#### Submissions are scored on F1 Score
+### Submissions are scored on F1 Score
 
 <img src="assets/F1_eqn.png" width="100%"/>
 
@@ -52,15 +52,15 @@ Several sets of **word embeddings** were also provided:
 ***
 ***
 
-### Exploratory Data Analysis
+## Exploratory Data Analysis
 
 Every good data scientist will understand that the first step in tackling a problem is to look at the data, so that is what we did.
 
-##### Imbalanced Target:
+### Imbalanced Target:
 We first looked at the distribution of the target variable.
 The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere. That means we are working with a highly imbalanced data set, which must be considered when modeling.
 
-##### Word Clouds:
+### Word Clouds:
 Next we looked at a word cloud of the insincere and sincere questions to get a feel for the data. As you can see the insincere question has much more controversial words.
 
 <a target="_blank_" href="assets/wordcloud_good.png">
@@ -71,7 +71,7 @@ Next we looked at a word cloud of the insincere and sincere questions to get a f
 	<img src="assets/wordcloud_bad.png"  width="100%" >
 </a>
 
-##### Word frequency:
+### Word frequency:
 
 It is hard to get much detail from a word cloud, so we looked at the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for "best ways" or "pro cons" while insincere questions will ask about a specific group or include phrases such as "stupid question".
 
@@ -99,7 +99,7 @@ Bi-Gram Frequency Chart:
 | indian women         | 184        | people think           | 1143       |
 | white women          | 168        | united states?         | 1126       |
 
-##### Logistic Regression Coefficients:
+### Logistic Regression Coefficients:
 Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and see how they influence the target variable. The highest weighted words are extremely offensive such as "castrate".
 
 | Most insincere words	 |  Coefficient 	   |Most sincere words     | Coefficient |
@@ -115,18 +115,20 @@ Next we ran a basic Logistic Regression model so that we could examine the weigh
 | blacks                 | 14.226              |best                   | -6.358              |
 | women                  | 14.122              |democrats republicans  | -6.594              |
 
-We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. The data makes sense as the most negative words are "best" or "tips". What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as "liberals conservatives" or "black white".  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.
+We also looked at the most negative weighted words, suggesting words that are most found with sincere questions. The data makes sense as the most negative words are "best" or "tips". What is interesting here is that with sincere questions there is mentions of both sides of opposing ideas, such as "liberals conservatives" or "black white".  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.
 
 
-#### Word Embeddings:
-To visualize the overlapping of insincere and sincere words, we took the 250 most frequent words of both categories, took their respective vectors from a pre-trained glove-embedding, and mapped them to 3D space using PCA. Below you can see the 3D-visualization of the words. The <span style="color:blue">blue</span> dots are words belonging to the sincere category, <span style="color:red">red</span> dots are words belonging to the insincere category, and <span style="color:green">green</span> dots belong to both. The glove embedding uses vectors of dimension 300 and only 15.86% of the variance is explained when mapping down to 3 dimensions, so this visualization is by no means a perfect representation of spread. However, we noticed that insincere words tend to be more spread out compared to sincere word and that there is a significant amount of overlapping, making this a more difficult problem.
+### Word Embeddings:
+To visualize the overlapping of insincere and sincere words, we took the 250 most frequent words of both categories, took their respective vectors from a pre-trained glove-embedding, and mapped them to 3D space using PCA. Below you can see the 3D-visualization of the words. The <span style="color:blue">blue</span> dots are words belonging to the sincere category, <span style="color:red">red</span> dots are words belonging to the insincere category, and <span style="color:green">green</span> dots belong to both. The glove embedding uses vectors of dimension 300 and only 15.86% of the variance is explained when mapping down to 3 dimensions, so this visualization is by no means a perfect representation of spread. However, we noticed that insincere words tend to be more spread out compared to sincere word and that there is a significant amount of overlapping, making this a more difficult problem. We noticed that words which are insincere tend to refer to a group of people and words which are sincere or both tend to have more neutral connotations.
 
+
+#### Interactive representation of word vectors for top words from data:
 <iframe width="100%" height="700" src="//jsfiddle.net/avishkas/f3wmypv9/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
 
 
 ***
 ***
-### Data Preprocessing
+## Data Preprocessing
 This Kaggle competition is kernel only, so we can only use the provided data, therefore we planned on utilizing the word embeddings provided. Word embedding is a natural language processing technique where words or phrases from the vocabulary are mapped to vectors of real numbers. However, to get the most of word embeddings the vocabulary of the training set must be in the embeddings, for example if the word "cat" is in the training set, there must also be an entry for it in the embedding.
 
 After exploring the data, we realized the data was quite messy and could be cleaned up. Cleaning the data was crucial to get better performance coverage of the word embeddings. With no preprocessing only 32.77% of all vocabulary in the question corpus was covered by the embedding and only 88.14% of all the text was covered.
@@ -145,9 +147,9 @@ After all of this cleaning we improved the word embedding coverage to cover 75% 
 
 ***
 ***
-### Modeling
+## Modeling
 
-#### Model 1: Simple Recurrent Neural Network
+### Model 1: Simple Recurrent Neural Network
 The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well). The entire model architecture is shown below:
 
 The entire model architecture is shown below:
@@ -184,13 +186,12 @@ Next, a simple bidirectional GRU layer is used for temporal reasoning (a more de
 
 This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score.
 
-### Ethics
-
+## Ethics
 This project raises important ethical questions.
 
 The standard for "sincere" and "insincere" was given in the training data. Based on what training data is fed into the model, this model can discriminate between any arbitrary types of questions/statements.
 
-The competition states that these models will be used to filter "Insincere" questions, but theres nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.
+The competition states that these models will be used to filter "Insincere" questions, but there is nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.
 
 Additionally, we asked ourselves: "Why are comments on these questions not given to the model?"
 
@@ -198,4 +199,15 @@ We realized that the model would be intended to censor questions before other us
 
 Is it right to have the ability to silence a minority of people for having different opinions?
 
-Will driving controversial opinions off of the mainstream web increase or decrease social divisidedness?
+Will driving controversial opinions off of the mainstream web increase or decrease social dividedness?
+
+## What We Learned
+Overall this project required a large amount of learning. The competition was inherently a NLP focused project, which no one on the team had much experience with.
+
+We learned:
+* New data processing techniques for cleaning text.
+* The power of word embeddings
+* Data Science is hard
+
+## Future Work
+Given more time, there are many areas of the project we would have expanded upon. We found a paper by Douwe, et al. called “Dynamic Meta-Embeddings for Improved Sentence Representations” explaining how to merge embeddings to improve performance. Therefore, we would have cleaned the data specifically for each embedding and tried to implement the algorithm described in the paper. In addition to incorporating multiple embeddings, we would have tried to understand more neural network models and see if ensembling them would impact performance. We also had the idea to model on features instead of tokenizing words. We also wanted to try translating words to different languages and back to see if that could have improved performance.

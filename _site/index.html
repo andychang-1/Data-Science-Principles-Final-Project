@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
-
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,maximum-scale=2">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=3a5833d8a647ab2e1610aaa4a0f288aa184cfa1c">
+    <meta charset="UTF-8">
 
 <!-- Begin Jekyll SEO tag v2.5.0 -->
 <title>Introduction | Quora Insincere Question Classification</title>
@@ -21,27 +17,23 @@
 {"@type":"WebSite","url":"http://localhost:4000/","headline":"Introduction","name":"Quora Insincere Question Classification","description":"A project for EE 461P Data Science Principles at the University of Texas at Austin by Andy Chang, Clive Unger, Nick Edelman, Nic Key, and Avishka Suduwa Dewage.","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="/assets/css/style.css?v=504f2f826225192c286f57cb0192b91ca640bad6">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">Quora Insincere Question Classification</h1>
+      <h2 class="project-tagline">A project for EE 461P Data Science Principles at the University of Texas at Austin by Andy Chang, Clive Unger, Nick Edelman, Nic Key, and Avishka Suduwa Dewage.</h2>
+      
+        <a href="http://github.com/Yuan-Chang-UT/Data-Science-Principles-Final-Project" class="btn">View on GitHub</a>
+      
+      
+    </section>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="http://github.com/Yuan-Chang-UT/Data-Science-Principles-Final-Project">View on GitHub</a>
-
-          <h1 id="project_title">Quora Insincere Question Classification</h1>
-          <h2 id="project_tagline">A project for EE 461P Data Science Principles at the University of Texas at Austin by Andy Chang, Clive Unger, Nick Edelman, Nic Key, and Avishka Suduwa Dewage.</h2>
-
-          
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        
-<h3 id="introduction">Introduction</h3>
+    <section class="main-content">
+      
+<h2 id="introduction">Introduction</h2>
 <p>Quora.com is a platform where people can ask questions and connect with others who contribute unique insights and quality answers. A key challenge is to weed out insincere questions, founded upon false premises, or intending to make a statement rather than look for helpful answers. Quora has released a Kaggle competition to develop models that identify and flag insincere questions.</p>
 
 <p><a href="https://www.kaggle.com/c/quora-insincere-questions-classification">Quora Insincere Questions Classification</a></p>
@@ -53,7 +45,7 @@
 <hr />
 <hr />
 
-<h3 id="the-data">The Data</h3>
+<h2 id="the-data">The Data</h2>
 <p>The <strong>training data</strong> is 1.31m rows of data, it looks like this.</p>
 
 <table>
@@ -126,24 +118,24 @@
 
 <hr />
 <hr />
-<h3 id="evaluation">Evaluation</h3>
+<h2 id="evaluation">Evaluation</h2>
 
-<h4 id="submissions-are-scored-on-f1-score">Submissions are scored on F1 Score</h4>
+<h3 id="submissions-are-scored-on-f1-score">Submissions are scored on F1 Score</h3>
 
 <p><img src="assets/F1_eqn.png" width="100%" /></p>
 
 <hr />
 <hr />
 
-<h3 id="exploratory-data-analysis">Exploratory Data Analysis</h3>
+<h2 id="exploratory-data-analysis">Exploratory Data Analysis</h2>
 
 <p>Every good data scientist will understand that the first step in tackling a problem is to look at the data, so that is what we did.</p>
 
-<h5 id="imbalanced-target">Imbalanced Target:</h5>
+<h3 id="imbalanced-target">Imbalanced Target:</h3>
 <p>We first looked at the distribution of the target variable.
 The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere. That means we are working with a highly imbalanced data set, which must be considered when modeling.</p>
 
-<h5 id="word-clouds">Word Clouds:</h5>
+<h3 id="word-clouds">Word Clouds:</h3>
 <p>Next we looked at a word cloud of the insincere and sincere questions to get a feel for the data. As you can see the insincere question has much more controversial words.</p>
 
 <p><a target="_blank_" href="assets/wordcloud_good.png">
@@ -154,7 +146,7 @@ The number of insincere questions is much less than the sincere, with only 6% of
 	<img src="assets/wordcloud_bad.png" width="100%" />
 </a></p>
 
-<h5 id="word-frequency">Word frequency:</h5>
+<h3 id="word-frequency">Word frequency:</h3>
 
 <p>It is hard to get much detail from a word cloud, so we looked at the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for “best ways” or “pro cons” while insincere questions will ask about a specific group or include phrases such as “stupid question”.</p>
 
@@ -287,7 +279,7 @@ The number of insincere questions is much less than the sincere, with only 6% of
   </tbody>
 </table>
 
-<h5 id="logistic-regression-coefficients">Logistic Regression Coefficients:</h5>
+<h3 id="logistic-regression-coefficients">Logistic Regression Coefficients:</h3>
 <p>Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and see how they influence the target variable. The highest weighted words are extremely offensive such as “castrate”.</p>
 
 <table>
@@ -363,16 +355,17 @@ The number of insincere questions is much less than the sincere, with only 6% of
   </tbody>
 </table>
 
-<p>We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. The data makes sense as the most negative words are “best” or “tips”. What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as “liberals conservatives” or “black white”.  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.</p>
+<p>We also looked at the most negative weighted words, suggesting words that are most found with sincere questions. The data makes sense as the most negative words are “best” or “tips”. What is interesting here is that with sincere questions there is mentions of both sides of opposing ideas, such as “liberals conservatives” or “black white”.  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.</p>
 
-<h4 id="word-embeddings">Word Embeddings:</h4>
-<p>To visualize the overlapping of insincere and sincere words, we took the 250 most frequent words of both categories, took their respective vectors from a pre-trained glove-embedding, and mapped them to 3D space using PCA. Below you can see the 3D-visualization of the words. The <span style="color:blue">blue</span> dots are words belonging to the sincere category, <span style="color:red">red</span> dots are words belonging to the insincere category, and <span style="color:green">green</span> dots belong to both. The glove embedding uses vectors of dimension 300 and only 15.86% of the variance is explained when mapping down to 3 dimensions, so this visualization is by no means a perfect representation of spread. However, we noticed that insincere words tend to be more spread out compared to sincere word and that there is a significant amount of overlapping, making this a more difficult problem.</p>
+<h3 id="word-embeddings">Word Embeddings:</h3>
+<p>To visualize the overlapping of insincere and sincere words, we took the 250 most frequent words of both categories, took their respective vectors from a pre-trained glove-embedding, and mapped them to 3D space using PCA. Below you can see the 3D-visualization of the words. The <span style="color:blue">blue</span> dots are words belonging to the sincere category, <span style="color:red">red</span> dots are words belonging to the insincere category, and <span style="color:green">green</span> dots belong to both. The glove embedding uses vectors of dimension 300 and only 15.86% of the variance is explained when mapping down to 3 dimensions, so this visualization is by no means a perfect representation of spread. However, we noticed that insincere words tend to be more spread out compared to sincere word and that there is a significant amount of overlapping, making this a more difficult problem. We noticed that words which are insincere tend to refer to a group of people and words which are sincere or both tend to have more neutral connotations.</p>
 
+<h4 id="interactive-representation-of-word-vectors-for-top-words-from-data">Interactive representation of word vectors for top words from data:</h4>
 <iframe width="100%" height="700" src="//jsfiddle.net/avishkas/f3wmypv9/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
 
 <hr />
 <hr />
-<h3 id="data-preprocessing">Data Preprocessing</h3>
+<h2 id="data-preprocessing">Data Preprocessing</h2>
 <p>This Kaggle competition is kernel only, so we can only use the provided data, therefore we planned on utilizing the word embeddings provided. Word embedding is a natural language processing technique where words or phrases from the vocabulary are mapped to vectors of real numbers. However, to get the most of word embeddings the vocabulary of the training set must be in the embeddings, for example if the word “cat” is in the training set, there must also be an entry for it in the embedding.</p>
 
 <p>After exploring the data, we realized the data was quite messy and could be cleaned up. Cleaning the data was crucial to get better performance coverage of the word embeddings. With no preprocessing only 32.77% of all vocabulary in the question corpus was covered by the embedding and only 88.14% of all the text was covered.</p>
@@ -392,9 +385,9 @@ The number of insincere questions is much less than the sincere, with only 6% of
 
 <hr />
 <hr />
-<h3 id="modeling">Modeling</h3>
+<h2 id="modeling">Modeling</h2>
 
-<h4 id="model-1-simple-recurrent-neural-network">Model 1: Simple Recurrent Neural Network</h4>
+<h3 id="model-1-simple-recurrent-neural-network">Model 1: Simple Recurrent Neural Network</h3>
 <p>The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well). The entire model architecture is shown below:</p>
 
 <p>The entire model architecture is shown below:</p>
@@ -429,13 +422,12 @@ Non-trainable params: 0
 
 <p>This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score.</p>
 
-<h3 id="ethics">Ethics</h3>
-
+<h2 id="ethics">Ethics</h2>
 <p>This project raises important ethical questions.</p>
 
 <p>The standard for “sincere” and “insincere” was given in the training data. Based on what training data is fed into the model, this model can discriminate between any arbitrary types of questions/statements.</p>
 
-<p>The competition states that these models will be used to filter “Insincere” questions, but theres nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.</p>
+<p>The competition states that these models will be used to filter “Insincere” questions, but there is nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.</p>
 
 <p>Additionally, we asked ourselves: “Why are comments on these questions not given to the model?”</p>
 
@@ -443,20 +435,29 @@ Non-trainable params: 0
 
 <p>Is it right to have the ability to silence a minority of people for having different opinions?</p>
 
-<p>Will driving controversial opinions off of the mainstream web increase or decrease social divisidedness?</p>
+<p>Will driving controversial opinions off of the mainstream web increase or decrease social dividedness?</p>
 
-      </section>
-    </div>
+<h2 id="what-we-learned">What We Learned</h2>
+<p>Overall this project required a large amount of learning. The competition was inherently a NLP focused project, which no one on the team had much experience with.</p>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
+<p>We learned:</p>
+<ul>
+  <li>New data processing techniques for cleaning text.</li>
+  <li>The power of word embeddings</li>
+  <li>Data Science is hard</li>
+</ul>
+
+<h2 id="future-work">Future Work</h2>
+<p>Given more time, there are many areas of the project we would have expanded upon. We found a paper by Douwe, et al. called “Dynamic Meta-Embeddings for Improved Sentence Representations” explaining how to merge embeddings to improve performance. Therefore, we would have cleaned the data specifically for each embedding and tried to implement the algorithm described in the paper. In addition to incorporating multiple embeddings, we would have tried to understand more neural network models and see if ensembling them would impact performance. We also had the idea to model on features instead of tokenizing words. We also wanted to try translating words to different languages and back to see if that could have improved performance.</p>
+
+
+      <footer class="site-footer">
         
-        <p class="copyright">Quora Insincere Question Classification maintained by <a href="http://github.com/Yuan-Chang-UT">Yuan-Chang-UT</a></p>
+          <span class="site-footer-owner"><a href="http://github.com/Yuan-Chang-UT/Data-Science-Principles-Final-Project">Data-Science-Principles-Final-Project</a> is maintained by <a href="http://github.com/Yuan-Chang-UT">Yuan-Chang-UT</a>.</span>
         
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
       </footer>
-    </div>
+    </section>
 
     
   </body>
