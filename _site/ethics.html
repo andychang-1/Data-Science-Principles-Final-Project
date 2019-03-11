@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=86f33d74d53bb047f2883eb98237c92ccd509ee7">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Data Science Principles Project: Quora Insincere questions classification | Data-Science-Principles-Final-Project</title>
+<meta name="generator" content="Jekyll v3.7.4" />
+<meta property="og:title" content="Data Science Principles Project: Quora Insincere questions classification" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/ethics.html" />
+<meta property="og:url" content="http://localhost:4000/ethics.html" />
+<meta property="og:site_name" content="Data-Science-Principles-Final-Project" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/ethics.html","@type":"WebPage","headline":"Data Science Principles Project: Quora Insincere questions classification","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="http://github.com/Yuan-Chang-UT/Data-Science-Principles-Final-Project">View on GitHub</a>
+
+          <h1 id="project_title">Data-Science-Principles-Final-Project</h1>
+          <h2 id="project_tagline"></h2>
+
+          
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1 id="data-science-principles-project-quora-insincere-questions-classification">Data Science Principles Project: Quora Insincere questions classification</h1>
+
+<p>This is a final project done for EE 461P: Data Science Principles at the University of Texas at Austin. This project was completed by Andy Chang, Clive Unger, Nick Edelman, Nic Key, and Avishka Suduwa Dewage.</p>
+
+<h3 id="introduction">Introduction</h3>
+<p>Quora.com is a platform where people can ask questions and connect with others who contribute unique insights and quality answers.</p>
+
+<p>A key challenge is to weed out insincere questions, founded upon false premises, or intending to make a statement rather than look for helpful answers.</p>
+
+<p>Quora has released a Kaggle competition to develop models that identify and flag insincere questions. <a href="kaggle.com/c/quora-insincere-questions-classification">kaggle.com/c/quora-insincere-questions-classification</a></p>
+
+<p>While we are not veteran Kaggler’s our motivation with this competition was to learn interesting machine learning techniques used for text based data.</p>
+
+<p>Our original project proposal was based on the Kaggle competition “Classifying Toxic Comments”. [link toxic]</p>
+
+<p>However, since Quora recently released this new competition which has a similar premise we decided it would be interesting to work on a newer problem.</p>
+
+<h3 id="ethics">Ethics</h3>
+
+<hr />
+
+<p>This project raises important ethical questions.</p>
+
+<p>The standard for “sincere” and “insincere” was given in the training data. Based on what training data is fed into the model, this model can discriminate between any arbitrary types of questions/statements.</p>
+
+<p>The competition states that these models will be used to filter “Insincere” questions, but theres nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.</p>
+
+<hr />
+
+<p>Additionally, we asked ourselves: “Why are comments on these questions not given to the model?”</p>
+
+<p>We realized that the model would be intended to censor questions before other users were allowed to see them.</p>
+
+<p>Is it right to have the ability to silence a minority of people for having different opinions?</p>
+
+<p>Will driving controversial opinions off of the mainstream web increase or decrease social divisidedness?</p>
+
+<hr />
+
+<h3 id="the-data">The Data</h3>
+<p>The <strong>training data</strong> is 1.31m rows of data, it looks like this.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>qid</th>
+      <th>question_text</th>
+      <th>target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>00002165364db923c7e6</td>
+      <td>How did Quebec nationalists see their province as a nation in the 1960s?</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>…</td>
+      <td>…</td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>cd7642554d107f946d8a</td>
+      <td>What is the full form of DML?</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The <strong>test data</strong> is 56.4k rows of data, it obviously does not have the target labels, it looks like this.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>qid</th>
+      <th>question_text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>00014894849d00ba98a9</td>
+      <td>My voice range is A2-C5. My chest voice goes up to F4. Included sample in my higher chest range. What is my voice type?</td>
+    </tr>
+    <tr>
+      <td>…</td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td>fffed08be2626f74b139</td>
+      <td>Why do all the stupid people I know tend to be left-wing?</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>The rules by which the training data was scored is as follows:</p>
+<ul>
+  <li>Has a non-neutral tone</li>
+  <li>Is disparaging or inflammatory</li>
+  <li>Isn’t grounded in reality</li>
+  <li>Uses sexual content for shock value</li>
+</ul>
+
+<p>Several sets of <strong>word embeddings</strong> were also provided:</p>
+<ul>
+  <li>Google word2vec embeddings from Google News</li>
+  <li>“GloVe” word embeddings from Wikipedia</li>
+  <li>PPDB Paragram word Embeddings</li>
+  <li>fastText trained word embeddings from Wikinews</li>
+</ul>
+
+<hr />
+<hr />
+<h3 id="evaluation">Evaluation</h3>
+
+<h4 id="submissions-are-scored-on-f1-score">Submissions are scored on F1 Score</h4>
+
+<p><img src="assets/F1_eqn.png" width="100%" /></p>
+
+<hr />
+<hr />
+
+<h3 id="exploratory-data-analysis">Exploratory Data Analysis</h3>
+
+<p>Every good data scientist will understand that the first step in tackling a problem is to look at the data, so that is what we did.</p>
+
+<h5 id="imbalanced-target">Imbalanced Target:</h5>
+<p>We first looked at the distribution of the target variable. 
+The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere. That means we are working with a highly imbalanced data set, which must be considered when modeling.</p>
+
+<hr />
+
+<h5 id="word-clouds">Word Clouds:</h5>
+<p>Next we looked at a word cloud of the insincere and sincere questions to get a feel for the data. As you can see the insincere question has much more controversial words.</p>
+
+<hr />
+
+<p><a target="_blank" href="assets/wordcloud_good.png">
+	<img src="assets/wordcloud_good.png" width="100%" />
+</a></p>
+
+<p><a target="_blank" href="assets/wordcloud_bad.png">
+	<img src="assets/wordcloud_bad.png" width="100%" />
+</a></p>
+
+<hr />
+<h5 id="2-gram-frequency">2-gram frequency:</h5>
+
+<p>It is hard to get much detail from a word cloud, so we look a the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for “best ways” or “pro cons” while insincere questions will ask about a specific group or include phrases such as “stupid question”.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Most Insincere 2 grams</th>
+      <th>Word Count</th>
+      <th>Most Sincere 2 grams</th>
+      <th>Word Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>donald trump</td>
+      <td>1253</td>
+      <td>best way</td>
+      <td>6973</td>
+    </tr>
+    <tr>
+      <td>white people</td>
+      <td>673</td>
+      <td>year old</td>
+      <td>2972</td>
+    </tr>
+    <tr>
+      <td>black people</td>
+      <td>653</td>
+      <td>will happen</td>
+      <td>2084</td>
+    </tr>
+    <tr>
+      <td>many people</td>
+      <td>383</td>
+      <td>many people</td>
+      <td>1931</td>
+    </tr>
+    <tr>
+      <td>united states</td>
+      <td>360</td>
+      <td>computer science</td>
+      <td>1870</td>
+    </tr>
+    <tr>
+      <td>even though</td>
+      <td>335</td>
+      <td>even though</td>
+      <td>1859</td>
+    </tr>
+    <tr>
+      <td>trump supporters</td>
+      <td>335</td>
+      <td>known for?</td>
+      <td>1822</td>
+    </tr>
+    <tr>
+      <td>year old</td>
+      <td>330</td>
+      <td>united states</td>
+      <td>1797</td>
+    </tr>
+    <tr>
+      <td>president trump</td>
+      <td>328</td>
+      <td>long take</td>
+      <td>1796</td>
+    </tr>
+    <tr>
+      <td>hillary clinton</td>
+      <td>305</td>
+      <td>high school</td>
+      <td>1775</td>
+    </tr>
+    <tr>
+      <td>people think</td>
+      <td>297</td>
+      <td>best ways</td>
+      <td>1447</td>
+    </tr>
+    <tr>
+      <td>chinese people</td>
+      <td>255</td>
+      <td>social media</td>
+      <td>1435</td>
+    </tr>
+    <tr>
+      <td>indian muslims</td>
+      <td>225</td>
+      <td>donald trump</td>
+      <td>1417</td>
+    </tr>
+    <tr>
+      <td>indian girls</td>
+      <td>221</td>
+      <td>look like?</td>
+      <td>1327</td>
+    </tr>
+    <tr>
+      <td>people hate</td>
+      <td>217</td>
+      <td>much time</td>
+      <td>1287</td>
+    </tr>
+    <tr>
+      <td>north indians</td>
+      <td>204</td>
+      <td>much money</td>
+      <td>1176</td>
+    </tr>
+    <tr>
+      <td>people quora</td>
+      <td>186</td>
+      <td>best place</td>
+      <td>1162</td>
+    </tr>
+    <tr>
+      <td>indian women</td>
+      <td>184</td>
+      <td>people think</td>
+      <td>1143</td>
+    </tr>
+    <tr>
+      <td>white women</td>
+      <td>168</td>
+      <td>united states?</td>
+      <td>1126</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+<h5 id="logistic-regression-coefficients">Logistic Regression Coefficients:</h5>
+<p>Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and see how they influence the target variable. The highest weighted words are extremely offensive such as “castrate”.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Most insincere words</th>
+      <th>Coefficient</th>
+      <th>Most sincere words</th>
+      <th>Coefficient</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>castrated</td>
+      <td>20.612</td>
+      <td>books</td>
+      <td>-5.422</td>
+    </tr>
+    <tr>
+      <td>castrate</td>
+      <td>18.014</td>
+      <td>men women</td>
+      <td>-5.606</td>
+    </tr>
+    <tr>
+      <td>liberals</td>
+      <td>17.248</td>
+      <td>differences</td>
+      <td>-5.671</td>
+    </tr>
+    <tr>
+      <td>democrats</td>
+      <td>17.019</td>
+      <td>affect</td>
+      <td>-5.688</td>
+    </tr>
+    <tr>
+      <td>muslims</td>
+      <td>16.91</td>
+      <td>christians muslims</td>
+      <td>-5.912</td>
+    </tr>
+    <tr>
+      <td>indians</td>
+      <td>15.34</td>
+      <td>black hole</td>
+      <td>-5.929</td>
+    </tr>
+    <tr>
+      <td>trump</td>
+      <td>14.543</td>
+      <td>liberals conservatives</td>
+      <td>-5.978</td>
+    </tr>
+    <tr>
+      <td>americans</td>
+      <td>14.329</td>
+      <td>tips</td>
+      <td>-5.992</td>
+    </tr>
+    <tr>
+      <td>blacks</td>
+      <td>14.226</td>
+      <td>best</td>
+      <td>-6.358</td>
+    </tr>
+    <tr>
+      <td>women</td>
+      <td>14.122</td>
+      <td>democrats republicans</td>
+      <td>-6.594</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+<p>We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. The data makes sense as the most negative words are “best” or “tips”. What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as “liberals conservatives” or “black white”.  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.</p>
+
+<hr />
+<hr />
+<h3 id="data-preprocessing">Data Preprocessing</h3>
+<p>This Kaggle competition is kernel only, so we can only use the provided data, therefore we planned on utilizing the word embeddings provided. Word embedding is a natural language processing technique where words or phrases from the vocabulary are mapped to vectors of real numbers. However, to get the most of word embeddings the vocabulary of the training set must be in the embeddings, for example if the word “cat” is in the training set, there must also be an entry for it in the embedding.</p>
+
+<p>After exploring the data, we realized the data was quite messy and could be cleaned up. Cleaning the data was crucial to get better performance coverage of the word embeddings. With no preprocessing only 32.77% of all vocabulary in the question corpus was covered by the embedding and only 88.14% of all the text was covered.</p>
+
+<p>Our cleaning process:</p>
+<ol>
+  <li>Expand contractions out to two words</li>
+  <li>Remove non-printable characters.</li>
+  <li>Replace special characters with words. For example ‘∞’: ‘infinity’</li>
+  <li>Replace numbers with # symbol.</li>
+  <li>Change European spellings to American and correct other common misspellings</li>
+  <li>“Facebook”,  “Instagram” , etc.  convert to “Social medium”</li>
+  <li>Remove stopwords and one character words.</li>
+</ol>
+
+<p>After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and 99.595% of the text.</p>
+
+<hr />
+
+<h4 id="word-embeddings">Word Embeddings:</h4>
+
+<hr />
+<hr />
+<h3 id="modeling">Modeling</h3>
+
+<h4 id="model-1-simple-recurrent-neural-network">Model 1: Simple Recurrent Neural Network</h4>
+<p>The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well). The entire model architecture is shown below:
+***</p>
+
+<p>The entire model architecture is shown below:</p>
+
+<p><a target="_blank" href="assets/block_diagram.png">
+	<img src="assets/block_diagram.png" width="100%" />
+</a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>| Layer (type)                  | Output Shape     | Param #  |
+|-------------------------------|------------------|----------|
+| input_1 (InputLayer)          | (None, 100)      | 0        |
+| embedding_1 (Embedding)       | (None, 100, 300) | 15000000 |
+| bidirectional_1 (Bidirection  | (None, 100, 128) | 140544   |
+| global_max_pooling1d_1 (Glob) | (None, 128)      | 0        |
+| dense_1 (Dense)               | (None, 16)       | 2064     |
+| dropout_1 (Dropout)           | (None, 16)       | 0        |
+| dense_2 (Dense)               | (None, 1)        | 17       |
+|-------------------------------|------------------|----------|
+
+Total params: 15,142,625
+
+Trainable params: 15,142,625
+
+Non-trainable params: 0
+</code></pre></div></div>
+
+<hr />
+
+<p>For both inference and training, each input question/sentence is first cleaned, tokenized, and padded into a sequence of length 100. This is fed into the model’s first layer, the embedding layer. As previously stated, we experimented with different pre-trained embeddings (such as word2vec, GloVe etc.) and learned embeddings (from provided training data) for this layer. This RNN implementation was used for further experimentation with different embedding options.</p>
+
+<hr />
+<hr />
+
+<p>Next, a simple bidirectional GRU layer is used for temporal reasoning (a more detailed diagram of a GRU is shown below). The rest of the network is filled out with the usual suspects: fully connected, max pooling, and dropout layers.</p>
+
+<p><img src="assets/GRU.png" alt="drawing" width="100%" /></p>
+
+<p>This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score.</p>
+
+<iframe width="100%" height="300" src="//jsfiddle.net/avishkas/f3wmypv9/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest="" frameborder="0"></iframe>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">Data-Science-Principles-Final-Project maintained by <a href="http://github.com/Yuan-Chang-UT">Yuan-Chang-UT</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>
