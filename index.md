@@ -1,26 +1,17 @@
----
----
 
-# Data Science Principles Project: Quora Insincere questions classification
+## Introduction
+Quora.com is a platform where people can ask questions and connect with others who contribute unique insights and quality answers. A key challenge is to weed out insincere questions, founded upon false premises, or intending to make a statement rather than look for helpful answers. Quora has released a Kaggle competition to develop models that identify and flag insincere questions.
 
-This is a final project done for EE 461P: Data Science Principles at the University of Texas at Austin. This project was completed by Andy Chang, Clive Unger, Nick Edelman, Nic Key, and Avishka Suduwa Dewage.
+[Quora Insincere Questions Classification](https://www.kaggle.com/c/quora-insincere-questions-classification)
 
+ While we are not veteran Kaggler's our motivation for this competition was to learn interesting machine learning techniques used for text based data.
 
-### Introduction
-Quora.com is a platform where people can ask questions and connect with others who contribute unique insights and quality answers. 
-
-A key challenge is to weed out insincere questions, founded upon false premises, or intending to make a statement rather than look for helpful answers. 
-
-Quora has released a Kaggle competition to develop models that identify and flag insincere questions. [kaggle.com/c/quora-insincere-questions-classification](kaggle.com/c/quora-insincere-questions-classification)
-
-While we are not veteran Kaggler's our motivation with this competition was to learn interesting machine learning techniques used for text based data.
-
-Our original project proposal was based on the Kaggle competition "Classifying Toxic Comments". [link toxic] However, since Quora recently released this new competition which has a similar premise we decided it would be interesting to work on a newer problem. 
+Our original project proposal was based on the Kaggle competition ["Toxic Comment Classification Challenge"](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge). However, since Quora recently released this new competition which has a similar premise we decided it would be interesting to work on a newer problem.
 
 ***
 ***
 
-### The Data
+## The Data
 The **training data** is 1.31m rows of data, it looks like this.
 
 | qid | question_text | target |
@@ -37,8 +28,6 @@ The **test data** is 56.4k rows of data, it obviously does not have the target l
 | … | … |
 | fffed08be2626f74b139 | Why do all the stupid people I know tend to be left-wing?|
 
-***
-
 The rules by which the training data was scored is as follows:
 * Has a non-neutral tone
 * Is disparaging or inflammatory
@@ -53,9 +42,9 @@ Several sets of **word embeddings** were also provided:
 
 ***
 ***
-### Evaluation
+## Evaluation
 
-#### Submissions are scored on F1 Score
+### Submissions are scored on F1 Score
 
 <img src="assets/F1_eqn.png" width="100%"/>
 
@@ -63,36 +52,32 @@ Several sets of **word embeddings** were also provided:
 ***
 ***
 
-### Exploratory Data Analysis
+## Exploratory Data Analysis
 
-Every good data scientist will understand that the first step in tackling a problem is to look at the data, so that is what we did. 
+Every good data scientist will understand that the first step in tackling a problem is to look at the data, so that is what we did.
 
-##### Imbalanced Target:
-We first looked at the distribution of the target variable. 
-The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere. That means we are working with a highly imbalanced data set, which must be considered when modeling. 
+### Imbalanced Target:
+We first looked at the distribution of the target variable.
+The number of insincere questions is much less than the sincere, with only 6% of the training set being insincere. That means we are working with a highly imbalanced data set, which must be considered when modeling.
 
-***
-
-##### Word Clouds:
+### Word Clouds:
 Next we looked at a word cloud of the insincere and sincere questions to get a feel for the data. As you can see the insincere question has much more controversial words.
 
-***
-
-<a target="_blank" href="assets/wordcloud_good.png">
+#### Word Cloud of Sincere Words
+<a target="_blank_" href="assets/wordcloud_good.png">
 	<img src="assets/wordcloud_good.png"  width="100%" >
 </a>
 
-<a target="_blank" href="assets/wordcloud_bad.png">
+#### Word Cloud of Insincere Words
+<a target="_blank_" href="assets/wordcloud_bad.png">
 	<img src="assets/wordcloud_bad.png"  width="100%" >
 </a>
 
+### Word frequency:
 
+It is hard to get much detail from a word cloud, so we looked at the word frequencies of respective classes. In addition to single word frequencies, we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions ask for "best ways" or "pro cons" while insincere questions ask about a specific group or include phrases such as "stupid question".
 
-***
-##### 2-gram frequency:
-
-It is hard to get much detail from a word cloud, so we look a the word frequencies of respective classes. In addition to single word frequencies we also examined bi-gram and tri-gram frequency. The results make sense, sincere questions will ask for "best ways" or "pro cons" while insincere questions will ask about a specific group or include phrases such as "stupid question". 
-
+Bi-Gram Frequency Chart:
 
 | Most Insincere 2 grams | Word Count | Most Sincere 2 grams | Word Count |
 |----------------------|------------|------------------------|------------|
@@ -116,9 +101,11 @@ It is hard to get much detail from a word cloud, so we look a the word frequenci
 | indian women         | 184        | people think           | 1143       |
 | white women          | 168        | united states?         | 1126       |
 
-***
-##### Logistic Regression Coefficients:
+### Logistic Regression Coefficients:
 Next we ran a basic Logistic Regression model so that we could examine the weights of individual words and see how they influence the target variable. The highest weighted words are extremely offensive such as "castrate".
+
+We also looked at the most negative weighted words, which are potentially influence sincere questions. The most negative words are “best” or “tips”, which makes sense. Another interesting observations is that with sincere questions there is mentions of both sides of opposing ideas, such as “liberals conservatives” or “black white”. This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one.
+
 
 | Most insincere words	 |  Coefficient 	   |Most sincere words     | Coefficient |
 |------------------------|---------------------|-----------------------|---------------------|
@@ -133,15 +120,21 @@ Next we ran a basic Logistic Regression model so that we could examine the weigh
 | blacks                 | 14.226              |best                   | -6.358              |
 | women                  | 14.122              |democrats republicans  | -6.594              |
 
-***
-We also looked at the most negative weighted words, suggesting words that are most found in sincere questions. The data makes sense as the most negative words are "best" or "tips". What is interesting here is that in sincere questions there is mentions of both sides of opposing ideas, such as "liberals conservatives" or "black white".  This possibly suggests that more sincere questions consider both sides of argument rather than imposing stereotypes on one. 
+
+### Word Embeddings:
+ A word embedding is a natural language processing technique where words or phrases from the vocabulary are mapped to vectors of real numbers.
+
+To visualize the overlapping of insincere and sincere words, we took the 250 most frequent words of both categories, took their respective vectors from a pre-trained glove-embedding, and mapped them to 3D space using PCA. Below you can see the 3D-visualization of the words. The <span style="color:blue">blue</span> dots are words belonging to the sincere category, <span style="color:red">red</span> dots are words belonging to the insincere category, and <span style="color:green">green</span> dots belong to both. The glove embedding uses vectors of dimension 300 and only 15.86% of the variance is explained when mapping down to 3 dimensions, so this visualization is by no means a perfect representation of spread. However, we noticed that insincere words tend to be more spread out compared to sincere word and that there is a significant amount of overlapping, making this a more difficult problem. We noticed that words which are insincere tend to refer to a group of people and words which are sincere or both tend to have more neutral connotations.
 
 
+#### Interactive representation of word vectors for top words from data:
+<iframe width="100%" height="700" src="//jsfiddle.net/avishkas/f3wmypv9/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+
 
 ***
 ***
-### Data Preprocessing
-This Kaggle competition is kernel only, so we can only use the provided data, therefore we planned on utilizing the word embeddings provided. Word embedding is a natural language processing technique where words or phrases from the vocabulary are mapped to vectors of real numbers. However, to get the most of word embeddings the vocabulary of the training set must be in the embeddings, for example if the word "cat" is in the training set, there must also be an entry for it in the embedding. 
+## Data Preprocessing
+This Kaggle competition is kernel only, so we can only use the provided data, therefore we utilize the word embeddings provided. However, to get the most out of word embeddings the vocabulary of the training set must overlap with the embeddings. For example if the word "cat" is in the training set, there must also be an entry for it in the embedding.
 
 After exploring the data, we realized the data was quite messy and could be cleaned up. Cleaning the data was crucial to get better performance coverage of the word embeddings. With no preprocessing only 32.77% of all vocabulary in the question corpus was covered by the embedding and only 88.14% of all the text was covered.
 
@@ -149,30 +142,24 @@ Our cleaning process:
 1. Expand contractions out to two words
 2. Remove non-printable characters.
 3. Replace special characters with words. For example '∞': 'infinity'
-4. Replace numbers with # symbol. 
+4. Replace numbers with # symbol.
 5. Change European spellings to American and correct other common misspellings
 6. “Facebook”,  “Instagram” , etc.  convert to “Social medium”
-6. Remove stopwords and one character words.
+6. Remove stop words and one character words.
 
-After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and 99.595% of the text. 
-
-***
-
-#### Word Embeddings:
-
+After all of this cleaning we improved the word embedding coverage to cover 75% of the vocab and 99.595% of the text.
 
 
 ***
 ***
-### Modeling
+## Modeling
 
-#### Model 1: Simple Recurrent Neural Network
+### Model 1: Simple Recurrent Neural Network
 The first model we experimented with is a simple RNN implementation in Keras. This RNN utilizes a bidirectional GRU as its recurrent unit (from other kernels, using a bidirectional LSTM as the recurrent unit didn’t seem to perform as well). The entire model architecture is shown below:
-***
 
 The entire model architecture is shown below:
 
-<a target="_blank" href="assets/block_diagram.png">
+<a target="_blank_" href="assets/block_diagram.png">
 	<img src="assets/block_diagram.png"  width="100%" >
 </a>
 
@@ -195,20 +182,39 @@ Trainable params: 15,142,625
 Non-trainable params: 0
 ~~~~
 
-***
+For both inference and training, each input question/sentence is first cleaned, tokenized, and padded into a sequence of length 100. This is fed into the model’s first layer, the embedding layer. As previously stated, we experimented with different pre-trained embeddings (such as word2vec, GloVe etc.) and learned embeddings (from provided training data) for this layer. This RNN implementation was used for further experimentation with different embedding options.
 
-For both inference and training, each input question/sentence is first cleaned, tokenized, and padded into a sequence of length 100. This is fed into the model’s first layer, the embedding layer. As previously stated, we experimented with different pre-trained embeddings (such as word2vec, GloVe etc.) and learned embeddings (from provided training data) for this layer. This RNN implementation was used for further experimentation with different embedding options. 
-
-***
-***
-
-Next, a simple bidirectional GRU layer is used for temporal reasoning (a more detailed diagram of a GRU is shown below). The rest of the network is filled out with the usual suspects: fully connected, max pooling, and dropout layers. 
+Next, a simple bidirectional GRU layer is used for temporal reasoning (a more detailed diagram of a GRU is shown below). The rest of the network is filled out with the usual suspects: fully connected, max pooling, and dropout layers.
 
 <img src="assets/GRU.png" alt="drawing" width="100%"/>
 
 
-This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score. 
+This model performs reasonably well considering its simplicity. The top score achieved using this model is 0.67; an ensemble of RNNs using GloVe, FastText, and Paragram embeddings as the weights for the embedding layer is used to attain this score.
+
+### Model 2: GRU RNN w/ Capsule Layer and Preprocessing
+This model is derived from the model described above; however, it differs in three ways. First, the text is cleaned by the removal of punctuation, non-printable characters and contractions. Secondly, a few layers, including a ‘capsule’ layer taken from another kernel, are inserted into the RNN model. Thirdly, instead of ensembling multiple RNN models each with a different pre-trained embedding, this model simply averages the different embedding matrices and trains a single model. The block diagram for this model is shown below.
+
+<img src="assets/block_diagram2.png" alt="drawing" width="100%"/>
+
+Capsule networks (CapsNets) were originally theorized and designed for vision tasks, as an alternative to CNNs. However, the capsule layer (the main unit of the CapsNet) has since been introduced in networks for NLP problems, and was very successful in the Wikipedia Toxic Comment Classification Kaggle Competition. Since this competition is so similar in nature to the Wikipedia Competition, capsule-equipped GRU-based RNNs have shown some of the best performance in the kernels and leaderboard.
+
+This model performs much better than the first, achieving a public score of 0.689. However, many people participating in the competition have highlighted the fact that this Keras CuDNN-based implementation of GRU is optimized for speed, but may have varying outputs for the same data (or kernel). Thus, this score may fluctuate up or down across submissions.
 
 
 
-<iframe width="100%" height="300" src="//jsfiddle.net/avishkas/f3wmypv9/embedded/result/dark/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+
+## Ethics
+This project raises important ethical questions. The standard for "sincere" and "insincere" was given in the training data. Based on what training data is fed into the model, this model can discriminate between any arbitrary types of questions/statements. The competition states that these models will be used to filter "Insincere" questions, but there is nothing preventing Quora from using these models to censor unsavory or controversial questions just to keep their advertising partners happy.
+
+Additionally, we asked ourselves: "Why are comments on these questions not given to the model?" We realized that the model would be intended to censor questions before other users were allowed to see them. Is it right to have the ability to silence a minority of people for having different opinions? Will driving controversial opinions off of the mainstream web increase or decrease social dividedness?
+
+## What We Learned
+Overall this project required a large amount of learning. The competition was inherently a NLP focused project, which no one on the team had much experience with.
+
+We learned:
+* New data processing techniques for cleaning text.
+* The power of word embeddings
+* Data Science is hard
+
+## Future Work
+Given more time, there are many areas of the project we would have expanded upon. We found a paper by Douwe, et al. called “Dynamic Meta-Embeddings for Improved Sentence Representations” explaining how to merge embeddings to improve performance. Therefore, we would have cleaned the data specifically for each embedding and tried to implement the algorithm described in the paper. In addition to incorporating multiple embeddings, we would have tried to understand more neural network models and see if ensembling them would impact performance. We also had the idea to model on features instead of tokenizing words. We also wanted to try translating words to different languages and back to see if that could have improved performance.

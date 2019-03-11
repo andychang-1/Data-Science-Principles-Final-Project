@@ -1,4 +1,4 @@
-theme: jekyll-theme-slate
-repository: Yuan-Chang-UT/Data-Science-Principles-Final-Project
-
+theme: jekyll-theme-cayman
+title:  Quora Insincere Question Classification
+description: A project for EE 461P Data Science Principles at the University of Texas at Austin by Andy Chang, Clive Unger, Nick Edelman, Nic Key, and Avishka Suduwa Dewage.
 exclude: [Notebooks/, Poster Presentation/, README.m, Gemfile, Gemfile.lock]
